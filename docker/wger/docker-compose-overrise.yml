@@ -1,0 +1,22 @@
+# Example override file. Copy as docker-compose.override.yml and edit as needed
+
+services:
+
+  web:
+    env_file:
+      - /home/compukid/apps/.secrets/wger.env
+
+  nginx:
+    ports:
+      - "8010:80"
+  db:
+    env_file:
+      - /home/compukid/apps/.secrets/wger.env
+
+  celery_worker:
+    env_file:
+      - /home/compukid/apps/.secrets/wger.env
+
+  celery_beat:
+    env_file:
+      - /home/compukid/apps/.secrets/wger.env
