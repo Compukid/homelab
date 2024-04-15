@@ -1,0 +1,12 @@
+services:
+  stirling-pdf:
+    image: frooodle/s-pdf:latest
+    ports:
+      - '8011:8080'
+    volumes:
+      - /home/compukid/apps/pdf/trainingData:/usr/share/tessdata #Required for extra OCR languages
+      - /home/compukid/apps/pdf/extraConfigs:/configs
+      - /home/compukid/apps/pdf/customFiles:/customFiles/
+      - /home/compukid/apps/pdf/logs:/logs/
+    environment:
+      - DOCKER_ENABLE_SECURITY=true
