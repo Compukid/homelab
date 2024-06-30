@@ -1,0 +1,63 @@
+
+ProxMox Setup for PCIe Passthrough
+
+commands came from craftcomputing youtube channel https://www.youtube.com/watch?v=_hOBAGKLQkI
+
+
+---Add IOMMU Support---
+
+nano /etc/kernel/cmdline
+***append A or B to the end of line one with a space
+A) intel_iommu=on
+    - OR -
+B) amd_iommu=on
+
+Save file and close
+
+nano /etc/modules
+
+vfio
+vfio_iommu_type1
+vfio_pci
+vfio_virqfd
+
+Save file and close
+
+proxmox-boot-tool refresh
+
+update-initramfs -u -k all
+
+--REBOOT-- 
+
+----PCI VGA passthrough----
+ 
+ SSH into proxmox server
+ enter lspci --list al pci devices
+locate graphics card and write down device ID (Example 01:00.0)
+next run
+lspci -n -s 01:00.0 -v
+and this will show lot of info with the hex address of the card on the top line.
+copy/write down the hex address. 
+---block video card conflicts---
+Enter the below command and change ### with the hex address from above command
+
+echo "options vfio-pci ids=####.#### disable_vga=1"> /etc/modprobe.d/vfio.conf
+
+---next block modules---
+echo "blacklist nouveau" >> /etc/modprobe.d/blacklist.conf
+echo "blacklist nvidia" >> /etc/modprobe.d/blacklist.conf
+
+update-initramfs -u -k all
+--REBOOT proxmox-- 
+
+Once proxmox comes back DO NOT start VM. Highlight VM
+on the Proxmox VM go to Hardware 
+ Click add PCI device and select RAW device and choose the device in the list.
+ ***make sure all functions box is checked for video cards. ***
+
+
+
+{troubleshoot}
+for this to work, I needed to also change the display to Standard vga instead of socket. 
+
+I may have rebooted again too, if that helps
