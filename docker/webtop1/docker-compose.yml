@@ -8,11 +8,13 @@ services:
       - PUID=1000
       - PGID=1000
       - TZ=America/New_York
-      - TITLE=Webtop #optional
+      - TITLE=Webtop1 #optional
     volumes:
-      - /config:/config
+      - ~/apps/webtop/config:/config
     ports:
       - 3000:3000
       - 3001:3001
+    devices:
+      - /dev/dri/renderD128:/dev/dri
     shm_size: "1gb" #optional
     restart: unless-stopped
