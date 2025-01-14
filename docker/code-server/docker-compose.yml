@@ -1,13 +1,16 @@
----
 services:
   code-server:
     image: lscr.io/linuxserver/code-server:latest
     container_name: code-server
     volumes:
-      - /home/compukid/apps/code-server/config:/config
-    env_file:
-      - /home/compukid/apps/.secrets/code.env
-      - /home/compukid/apps/.secrets/default.env
+      - /mnt/cephfs/stacks/code-server/config:/config
+    environment:
+      - PUID=0
+      - PGID=0    
+      - HASHED_PASSWORD=${HASHED_PASSWORD}
+      - SUDO_PASSWORD=${SUDO_PASSWORD}
+      - DEFAULT_WORKSPACE=/config/workspace
+      - PROXY_DOMAIN=code.compucade.us
     ports:
       - 8043:8443
     restart: unless-stopped
