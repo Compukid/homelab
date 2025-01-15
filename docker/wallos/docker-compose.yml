@@ -6,8 +6,10 @@ services:
       - "8014:80/tcp"
     # Volumes store your data between container upgrades
     volumes:
-      - './db:/var/www/html/db'
-      - './logos:/var/www/html/images/uploads/logos'
-    env_file:
-      - /home/compukid/apps/.secrets/default.env
+      - '/mnt/cephfs/stacks/wallos/db:/var/www/html/db'
+      - '/mnt/cephfs/stacks/wallos/logos:/var/www/html/images/uploads/logos'
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=America/New_York
     restart: unless-stopped
