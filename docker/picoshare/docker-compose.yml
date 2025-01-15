@@ -1,0 +1,13 @@
+services:
+  picoshare:
+    image: mtlynch/picoshare
+    environment:
+      - PS_SHARED_SECRET=${PS_SHARED_SECRET}
+      - PS_BEHIND_PROXY=true
+      - PORT=4001
+    ports:
+      - 8020:4001
+    command: -db /data/store.db
+    volumes:
+      - /mnt/cephfs/stacks/picoshare/data:/data
+    restart: unless-stopped
