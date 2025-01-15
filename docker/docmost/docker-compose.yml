@@ -1,0 +1,36 @@
+version: "3"
+
+services:
+  docmost:
+    image: docmost/docmost:latest
+    depends_on:
+      - db
+      - redis
+    environment:
+      PUID: 0
+      PGID: 0
+      APP_URL: "https://docmost.compucade.net"
+      APP_SECRET: ${APP_SECRET_STRING}
+      DATABASE_URL: ${DATABASE_URL_STRING}
+      REDIS_URL: "redis://redis:6379"
+    ports:
+      - "8001:3000"
+    restart: unless-stopped
+    volumes:
+      - /mnt/cephfs/stacks/docmost/storage:/app/data/storage
+
+  db:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_DB: docmost
+      POSTGRES_USER: docmost
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD_STRING}
+    restart: unless-stopped
+    volumes:
+      - /mnt/cephfs/stacks/docmost/db_data:/var/lib/postgresql/data
+
+  redis:
+    image: redis:7.2-alpine
+    restart: unless-stopped
+    volumes:
+      - /mnt/cephfs/stacks/docmost/redis_data:/data

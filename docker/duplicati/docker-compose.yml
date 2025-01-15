@@ -1,0 +1,17 @@
+services:
+  duplicati:
+    image: lscr.io/linuxserver/duplicati:latest
+    container_name: duplicati
+    environment:
+      - PUID=0
+      - PGID=0
+      - TZ=America/New_york
+      - CLI_ARGS= #optional
+      - SETTINGS_ENCRYPTION_KEY=QUq6o3M5mE      
+    volumes:
+      - /mnt/cephfs/stacks/duplicati/config:/config
+      - /mnt/cephfs/stacks/duplicati/backups:/backups
+      - /:/source
+    ports:
+      - 8201:8200
+    restart: unless-stopped
