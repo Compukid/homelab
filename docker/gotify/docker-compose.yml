@@ -1,0 +1,8 @@
+services:
+  gotify:
+    image: gotify/server
+    ports:
+      - 8111:80
+    volumes:
+      - /mnt/cephfs/stacks/gotify/gotify_data:/app/data
+    restart: unless-stopped
